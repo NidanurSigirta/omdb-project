@@ -1,86 +1,78 @@
-# OMDB Movie Search Project
+﻿# CineVault
 
-## How to Set Up Your Repository
+CineVault is a cinematic movie discovery web application with OMDb API integration, custom collection management, and a responsive dark interface.
 
-**WARNING**: This is a template project. Do not fork this repository.
+## 🚀 Project Overview
 
-Please follow the visual steps below to create and set up the project repository on your own GitHub profile.
+CineVault allows users to search movies and series, save favorites, and organize titles into custom collections. The app is built with a frontend powered by vanilla JavaScript and a lightweight Node.js + Express server for static hosting.
 
-1. Click the **"Use this template"** button at the top right of this page.
+## ✨ Features
 
-<img width="1920" height="1080" alt="Use this template example" src="https://github.com/user-attachments/assets/137c0f6c-bc6c-4584-8752-02c067051438" />
-<br><br>
+- Responsive dark-themed UI for desktop and mobile
+- Search movies and series using the OMDb API
+- Toggle between grid view and list view
+- Save favorites and organize movies into folders
+- Persistent user data with LocalStorage
+- Detailed movie information with IMDb rating, plot, and cast
 
-2. Select **"Create a new repository"** to generate your own public repository for this task.
+## 🧩 Technologies
 
-<img width="1920" height="1080" alt="Create a new repository" src="https://github.com/user-attachments/assets/87b9032e-6e10-4679-88bb-c42a98894edf" />
-<br><br>
+- HTML5
+- CSS3
+- JavaScript
+- Node.js
+- Express
+- OMDb API
+- LocalStorage
 
-3. Name your repository as **"omdb-project"** and click the **"Create repository"** button.
+## 📁 Project Structure
 
-<img width="1920" height="1080" alt="Create repository" src="https://github.com/user-attachments/assets/dd808d69-6ade-4903-8f77-831b643dbdff" />
-<br><br>
+```
+omdb-project/
+├── assets/          # Static media assets (images, icons, textures)
+├── node_modules/    # Dependencies installed by npm
+├── app.js           # Frontend logic and API management
+├── index.html       # Main UI markup
+├── server.js        # Node.js + Express server
+├── style.css        # App styling and responsive design
+├── package.json     # Project metadata and dependencies
+└── README.md        # Project documentation
+```
 
-Upload all of your solutions to `github.com/yourusername/omdb-project`.
+## ⚙️ Installation
 
----
+1. Clone the repository
 
-## Overview
+```bash
+git clone https://github.com/nidanursigirta/cinevault.git
+cd omdb-project
+```
 
-This project is designed to evaluate your coding skills in web development. You are required to build a simple web application that consumes the [OMDB API](http://www.omdbapi.com/).
+2. Install dependencies
 
-* The application must be a fully responsive **Single Page Application (SPA)** and should display movie details such as **title, year, genre, director, and poster**.
-* The application must be written using **HTML, CSS, and JavaScript**.
-* If your project meets all the requirements, you may extend it with additional functionalities.
-* After development, you must deploy the project using [GitHub Pages](https://pages.github.com). **Projects that are not deployed to GitHub Pages will not be evaluated and will receive 0 points.**
+```bash
+npm install
+```
 
-You must **create your own repository using this template** and upload your work there. 
-Do **not** attempt to push changes directly to this repository or any of its original branches.
+3. Start the server
 
----
+```bash
+node server.js
+```
 
-## Functional Requirements
+4. Open the app
 
-1. **Movie Search Input**
-   - Users must be able to enter a movie name and trigger a search.
-   - A search box and button are sufficient, but adding well-composed UI elements (e.g., filters similar to sahibinden.com) will earn bonus points.
+Navigate to `http://localhost:3000`
 
-2. **Display Movie Details**
-   - Show at least: Title, Year, Genre, Director, and Poster image.
-   - The design is up to you.
+## 📝 Notes
 
-3. **Error Handling**
-   - If the movie is not found or the API returns an error, display a clear message to the user.
-   - Unhandled errors will result in point deductions.
+- Make sure you have Node.js installed.
+- The app fetches movie data from the OMDb API, so an active internet connection is required.
 
-4. **Multiple Searches**
-   - Users should be able to perform multiple searches without refreshing the page.
-   - If the page is refreshed, the last search view should be retained (e.g., using LocalStorage or URL parameters).
+## 👤 Author
 
-5. **Backend Proxy (Optional)**
-   - If you implement a backend, it should handle API requests and return clean JSON to the frontend.
+Nidanur Sigirta
 
----
+## 📜 License
 
-## Non-Functional Requirements
-
-1. **Performance**
-   - API calls should be efficient. Avoid unnecessary repeated requests.
-
-2. **Usability**
-   - The interface should be simple, intuitive, and user-friendly.
-   - The design is up to you.
-
-3. **Portability**
-   - The application should work across modern browsers and be responsive for different screen sizes.
-
-4. **Maintainability**
-   - Code should be modular, well-documented, and easy to extend.
-
----
-
-## Deliverables & Submission
-
-Once you have completed the project, ensure you have the following ready:
-- A **public GitHub repository** containing your project code (created via the template).
-- A **hosted version** of the project deployed on GitHub Pages.
+This project is licensed under ISC.

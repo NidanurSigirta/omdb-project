@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineVault — Film Dünyasını Keşfet</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="slideshow">
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop')"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?q=80&w=2056&auto=format&fit=crop')"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=2070&auto=format&fit=crop')"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=2025&auto=format&fit=crop')"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="film-grain"></div>
+    </div>
+
+    <header class="header">
+        <div class="header-inner">
+            <a class="logo" href="javascript:void(0)" onclick="location.reload()" style="text-decoration: none;">
+                <span class="logo-icon">▶</span>
+                <span class="logo-text">CineVault</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#" class="nav-link active" id="navDiscover">Keşfet</a>
+                <a href="#" class="nav-link" id="navFavorites">Favoriler</a>
+                <a href="#" class="nav-link" id="navLists">Listeler</a>
+            </nav>
+            <div class="header-actions">
+                <button class="icon-btn" title="Bildirimler" 
+                        onclick="if(typeof showToast === 'function') showToast('Bu özellik demo sürümünde devre dışıdır.'); else alert('Yeni bildiriminiz yok.');">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </button>
+                <div class="avatar" title="Profil Ayarları" style="cursor: pointer;"
+                     onclick="if(typeof showToast === 'function') showToast('Profil ayarları çok yakında CineVault\'ta!'); else alert('Profil ayarları yakında!');">
+                     N
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="heroSection">
+        <div class="hero-content">
+            <p class="hero-eyebrow">Sinemanın Evrensel Kütüphanesi</p>
+            <h1 class="hero-title">Sıradaki<br/><em>Favorini</em><br/>Keşfet.</h1>
+            <p class="hero-subtitle">Milyonlarca film, dizi ve detay elinin altında.</p>
+
+            <div class="search-container">
+                <div class="search-bar">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Film veya dizi ara..." autocomplete="off"/>
+                    <button class="search-clear" id="clearBtn" title="Temizle">✕</button>
+                </div>
+                <div class="search-filters">
+                    <select class="filter-select" id="genreFilter">
+                        <option value="">Kategori: Hepsi</option>
+                        <option value="romance">Romantik</option>
+                        <option value="horror">Korku</option>
+                        <option value="comedy">Komedi</option>
+                        <option value="action">Aksiyon</option>
+                        <option value="scifi">Bilim Kurgu</option>
+                        <option value="drama">Dram</option>
+                    </select>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="">Tür: Hepsi</option>
+                        <option value="movie">Film</option>
+                        <option value="series">Dizi</option>
+                    </select>
+                    <button class="search-btn" id="searchBtn">
+                        <span>Ara</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="trending-tags">
+                <span class="tags-label">Popüler:</span>
+                <button class="tag" data-query="Inception">Inception</button>
+                <button class="tag" data-query="The Godfather">Godfather</button>
+                <button class="tag" data-query="Interstellar">Interstellar</button>
+                <button class="tag" data-query="Breaking Bad">Breaking Bad</button>
+                <button class="tag" data-query="Dune">Dune</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="loading-state" id="loadingState">
+            <div class="loader-film">
+                <div class="loader-reel"><div class="reel-inner"></div></div>
+                <p class="loader-text">İçerik aranıyor...</p>
+            </div>
+        </div>
+
+        <div class="error-state" id="errorState">
+            <div class="error-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <h3 class="error-title" id="errorTitle">Film bulunamadı</h3>
+            <p class="error-msg" id="errorMsg">Farklı bir arama terimi deneyin.</p>
+            <button class="retry-btn" id="retryBtn">Tekrar Dene</button>
+        </div>
+
+        <section class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 class="results-title" id="resultsTitle">Sonuçlar</h2>
+                <span class="results-count" id="resultsCount"></span>
+                <div class="view-toggle">
+                    <button class="view-btn active" id="gridViewBtn" title="Izgara Görünümü"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                    <button class="view-btn" id="listViewBtn" title="Liste Görünümü"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="2"/><rect x="3" y="11" width="18" height="2"/><rect x="3" y="17" width="18" height="2"/></svg></button>
+                </div>
+            </div>
+            <div class="movies-grid" id="moviesGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </main>
+
+    <footer class="footer" id="mainFooter">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">▶</span>
+                        <span class="logo-text">CineVault</span>
+                    </div>
+                    <p class="footer-slogan">Sinemanın kalbi, senin koleksiyonun.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Platform</h4>
+                        <a href="javascript:void(0)" onclick="location.reload()">Keşfet</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Kişisel</h4>
+                        <a href="javascript:void(0)" onclick="document.getElementById('navFavorites').click()">Favorilerim</a>
+                        <a href="javascript:void(0)" onclick="document.getElementById('navLists').click()">Listelerim</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 CineVault. Tüm Hakları Saklıdır. | Geliştirici: <strong>Nidanur Sıgırta</strong></p>
+                <div class="footer-social">
+                    <span>CineVault Experience | Built with Passion</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <button class="modal-close" id="modalClose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            <div class="modal-inner" id="modalInner"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="listModalOverlay">
+        <div class="modal list-modal-box">
+            <h3 class="list-modal-title">Koleksiyona Ekle</h3>
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">Bir liste seçin veya yeni bir isim yazın.</p>
+            <div class="existing-lists" id="existingListsContainer"></div>
+            <input type="text" id="newListNameInput" class="search-input list-modal-input" placeholder="Yeni liste oluştur..." autocomplete="off"/>
+            <div class="list-modal-actions">
+                <button class="retry-btn" id="listModalCancel">İptal</button>
+                <button class="search-btn" id="listModalSave">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
