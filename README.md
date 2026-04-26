@@ -66,7 +66,7 @@ omdb-project/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/nidanursigirta/cinevault.git
+git clone https://github.com/nidanursigirta/omdb-project.git
 cd omdb-project
 ```
 
