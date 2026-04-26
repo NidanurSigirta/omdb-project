@@ -1,6 +1,4 @@
-/* ===================================
-   CINEVAULT — app.js (The Ultimate Version)
-   =================================== */
+/* CINEVAULT — app.js */
 
 const BASE_URL = 'http://localhost:3000/api/search';
 
@@ -183,26 +181,22 @@ async function triggerSearch(page = 1) {
     state.query = searchInput.value.trim();
     state.type = typeFilter ? typeFilter.value : '';
     
-    // Seçili kategoriyi alıyoruz
     const selectedGenre = genreFilter ? genreFilter.value : '';
 
-    // Eğer kutu boşsa ama kategori seçiliyse, kategoriyi sorgu yap
     if (selectedGenre && !state.query) {
         state.query = selectedGenre; 
     }
 
-    // Başlığı güncelle
     state.customDisplayTitle = state.query ? `"${state.query}" Kategorisindeki Tüm İçerikler` : "Sonuçlar";
 
     // API Aramasını Başlat
     state.customPlaylistIds = null; 
     await searchMovies(false);
 
-    // İŞTE BURASI: Kategori veya Tür seçip araya basınca ekranı aşağı kaydıran kısım
-    // Sonuçların başladığı ana içerik alanına (main-content) odaklanır
+    
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
-        const targetTop = mainContent.offsetTop - 100; // 100px pay bırakıyoruz ki başlık tam görünsün
+        const targetTop = mainContent.offsetTop - 100;
         window.scrollTo({ 
             top: targetTop, 
             behavior: 'smooth' 
@@ -225,7 +219,7 @@ async function searchMovies(isShowcase = false) {
   const showcaseData = isShowcase ? state.customPlaylistIds : null;
 
   try {
-    // SENARYO 1: Sabit Listeler (Trendler veya Kategori İlk Açılış)
+    // Sabit Listeler Trendler veya Kategori İlk Açılış
     if (currentPlaylist || showcaseData) {
       const targetList = currentPlaylist || showcaseData;
       state.totalResults = targetList.length;
@@ -239,12 +233,10 @@ async function searchMovies(isShowcase = false) {
       
       state.results = results.filter(r => r.Response !== 'False');
     } 
-    // SENARYO 2: API Araması (Arama kutusu doluysa veya Tür seçiliyse)
     else {
       const startIndex = (state.page - 1) * 12;
       const endIndex = state.page * 12;
       
-      // OMDb 10'arlı sayfaladığı için bizim 12'li düzenimize uyduruyoruz
       const startOMDbPage = Math.floor(startIndex / 10) + 1;
       const endOMDbPage = Math.ceil(endIndex / 10);
 
@@ -252,7 +244,6 @@ async function searchMovies(isShowcase = false) {
       for (let p = startOMDbPage; p <= endOMDbPage; p++) {
         const params = new URLSearchParams({ s: state.query, page: p });
         
-        // Sadece Tür (Type) varsa ekliyoruz, Yıl (y) parametresi tamamen kaldırıldı.
         if (state.type) params.set('type', state.type);
         
         promises.push(fetch(`${BASE_URL}?${params}`).then(res => res.json()));
@@ -271,7 +262,6 @@ async function searchMovies(isShowcase = false) {
 
       if (combinedResults.length === 0) throw new Error('İçerik bulunamadı');
 
-      // 12'lik dilimi kesip alıyoruz
       const offset = (startOMDbPage - 1) * 10;
       const localStart = startIndex - offset;
       const localEnd = endIndex - offset;
@@ -381,8 +371,6 @@ function renderListsView() {
        bgImage = `background-image: url('${state.lists[name][0].Poster}');`;
     }
 
-    // --- KRİTİK DEĞİŞİKLİK BURADA ---
-    // wrapper.innerHTML içindeki folder-actions kısmını şu şekilde değiştir:
     wrapper.innerHTML = `
       <div class="list-folder">
         <div class="folder-bg" style="${bgImage}"></div>
@@ -408,17 +396,16 @@ function renderListsView() {
         </button>
       </div>`;
 
-    // --- DÜZENLEME MANTIĞI ---
     const editBtn = wrapper.querySelector('.edit-list-btn');
     editBtn.onclick = (e) => {
         e.stopPropagation();
-        showEditListModal(name); // Çirkin prompt yerine bizim modalı açar
+        showEditListModal(name); 
     };
     
     // TIKLAMA OLAYLARI
     const openList = () => renderSingleList(name);
     wrapper.querySelector('.list-folder').onclick = openList;
-    wrapper.querySelector('.folder-info-area').onclick = openList; // Yazıya tıklayınca da açılsın
+    wrapper.querySelector('.folder-info-area').onclick = openList; 
 
     // SİLME BUTONU
     const delBtn = wrapper.querySelector('.delete-list-btn');
@@ -433,8 +420,7 @@ function renderListsView() {
     
     moviesGrid.appendChild(wrapper);
   });
- // DÖNGÜDEN SONRA: Diğer klasörlerle birebir aynı boyutta zarif Artı Kartı
-  // DÖNGÜDEN SONRA: Kesin çalışan Artı Kartı
+
   const addCard = document.createElement('div');
   addCard.className = 'folder-wrapper add-folder-wrapper';
   addCard.innerHTML = `
@@ -452,9 +438,7 @@ function renderListsView() {
       </div>
   `;
   
-  // TIKLAMA OLAYI: Fonksiyona güvenmek yerine direkt modalı burada kuruyoruz
   const handleCreate = () => {
-      // Senin projedeki modal elementlerin (modalInner ve openModal() varsa)
       if (typeof modalInner !== 'undefined' && typeof openModal === 'function') {
           modalInner.innerHTML = `
               <div class="list-modal-box edit-compact">
@@ -482,15 +466,13 @@ function renderListsView() {
                   return;
               }
 
-              // LİSTEYİ OLUŞTUR
               state.lists[name] = [];
               localStorage.setItem('cinevault_lists', JSON.stringify(state.lists));
               closeModal();
-              renderListsView(); // Sayfayı yenile ki yeni klasör görünsün
+              renderListsView(); 
               if(typeof showToast === 'function') showToast(`"${name}" klasörü oluşturuldu.`);
           };
       } else {
-          // Eğer modal yapın farklıysa klasik prompt (geçici çözüm)
           const name = prompt("Yeni klasör adı girin:");
           if(name && name.trim()) {
               state.lists[name.trim()] = [];
@@ -512,12 +494,12 @@ function renderSingleList(name) {
   moviesGrid.innerHTML = ''; 
   const listMovies = state.lists[name];
   
-  // Başlık ve Sayı bilgilerini güncelle
+  
   resultsTitle.textContent = name; 
   resultsCount.textContent = `${listMovies.length} İçerik`;
   pagination.innerHTML = '';
 
-  // 1. GERİ DÖN BUTONUNU OLUŞTUR
+  // GERİ DÖN BUTONU
   const backBtn = document.createElement('button');
   backBtn.className = 'back-to-lists-btn'; 
   backBtn.innerHTML = `
@@ -528,34 +510,29 @@ function renderSingleList(name) {
     Klasörlere Dön
   `;
   
-  // Tıklama olayını en sağlam şekilde bağla
   backBtn.onclick = () => {
     console.log("Klasörler listesine dönülüyor...");
     renderListsView();
   };
 
-  // 2. BUTONU EKRANA EKLE (Grid düzenini bozmaması için kapsayıcıyla)
   const container = document.createElement('div'); 
   container.style.gridColumn = '1/-1'; 
   container.style.marginBottom = '20px'; // Filmlerle arasında boşluk olsun
   container.appendChild(backBtn);
   moviesGrid.appendChild(container);
 
-  // 3. İÇERİĞİ RENDER ET
   if(!listMovies || listMovies.length === 0) { 
     const emptyMsg = document.createElement('p');
     emptyMsg.style.cssText = 'grid-column:1/-1; text-align:center; padding:60px; color:var(--text-muted);';
     emptyMsg.textContent = 'Bu klasör henüz boş.';
     moviesGrid.appendChild(emptyMsg);
   } else { 
-    // innerHTML += KULLANMA! Bu yöntem butonun tıklama özelliğini bozar. 
-    // Onun yerine tek tek appendChild kullan:
+    
     listMovies.forEach((m, i) => {
       moviesGrid.appendChild(createCard(m, i, name));
     }); 
   }
 
-  // Sayfayı en tepeye taşı ki kullanıcı butonu hemen görsün
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -567,7 +544,6 @@ function renderResults(isShowcase = false) {
   const total = state.totalResults;
   const pages = Math.ceil(total / 12);
 
-  // İŞTE BURASI: En başta açılınca "Trendler ve Öne Çıkanlar" yazacak
   if (isShowcase) {
     resultsTitle.textContent = "Trendler ve Öne Çıkanlar";
     resultsCount.textContent = "Sizin için seçildi";
@@ -606,18 +582,14 @@ function createCard(movie, index, currentListName = null) {
   return card;
 }
 
-// Sayfa değiştirme ve otomatik aşağı kaydırma fonksiyonu
 async function goToPage(page) {
   state.page = parseInt(page, 10);
   
-  // Eğer arama kutusu boşsa ve bir playlist varsa "showcase" modundadır
   const isCurrentlyShowcase = !!(state.customPlaylistIds && !state.query);
   
-  // Filmleri getir
   await searchMovies(isCurrentlyShowcase); 
 
-  // EKRANI AŞAĞI KAYDIRAN KISIM:
-  // Sonuçların başladığı yere (main-content) odaklanır
+  // SCROLL HAREKETİ
   const targetTop = document.querySelector('.main-content').offsetTop - 80;
   window.scrollTo({ top: targetTop, behavior: 'smooth' });
 }
@@ -636,16 +608,12 @@ function makePageBtn(label, page, disabled, active = false) {
   btn.textContent = label;
   btn.disabled = disabled;
   
-  // Tıklanınca yukarıda yazdığımız goToPage fonksiyonunu çalıştırır
   if (!disabled) btn.onclick = () => goToPage(page); 
   
   return btn;
 }
 
-// ─── MODAL ───────────────────────────────────────────────────────
-// ─── MODAL VE DETAYLAR (TAM SÜRÜM) ───────────────────────────────────────────
 async function openDetail(imdbID) {
-  // Yükleniyor animasyonu
   modalInner.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:center;height:300px;">
       <div class="loader-reel" style="width:50px;height:50px;"></div>
@@ -660,7 +628,6 @@ async function openDetail(imdbID) {
 
     const hasPoster = data.Poster && data.Poster !== 'N/A';
     const rating = parseFloat(data.imdbRating) || 0;
-    // Yıldızları hesapla
     const stars = '★'.repeat(Math.round(rating / 2)) + '☆'.repeat(5 - Math.round(rating / 2));
 
     modalInner.innerHTML = `
@@ -708,7 +675,6 @@ async function openDetail(imdbID) {
   }
 }
 
-// Detay satırlarını şıkça oluşturan yardımcı fonksiyon
 function detail(label, value) {
   if (!value || value === 'N/A') return '';
   return `
@@ -726,8 +692,7 @@ function showToast(msg) { const t = $('toast'); if(!t) return; t.textContent = m
 let toastTimer = null;
 
 function showEditListModal(oldName) {
-    // Modal içeriğini düzenleme için hazırlıyoruz
-   // showEditListModal fonksiyonundaki modalInner.innerHTML kısmını şununla güncelle:
+    
 modalInner.innerHTML = `
     <div class="list-modal-box edit-compact">
         <h2 class="list-modal-title">Klasörü Düzenle</h2>
@@ -742,7 +707,6 @@ modalInner.innerHTML = `
 `;
     openModal();
 
-    // Güncelle butonuna basınca olacaklar
     document.getElementById('confirmEditBtn').onclick = () => {
         const newName = document.getElementById('editListInput').value.trim();
         
@@ -755,7 +719,6 @@ modalInner.innerHTML = `
             return;
         }
 
-        // Mantıksal değişim
         if (newName !== oldName) {
             state.lists[newName] = state.lists[oldName];
             delete state.lists[oldName];
@@ -766,7 +729,6 @@ modalInner.innerHTML = `
         showToast("Klasör adı güncellendi.");
     };
 
-    // Sayfa yüklendiğinde butonları aktif et
 const initHeaderActions = () => {
     const nBtn = document.getElementById('notificationBtn');
     const pBtn = document.getElementById('profileAvatar');
@@ -774,7 +736,6 @@ const initHeaderActions = () => {
     if (nBtn) {
         nBtn.onclick = (e) => {
             e.preventDefault();
-            // showToast fonksiyonun varsa onu çağırıyoruz
             if (typeof showToast === 'function') {
                 showToast("Şu an için okunmamış bir bildiriminiz bulunmuyor.");
             } else {
@@ -795,7 +756,6 @@ const initHeaderActions = () => {
     }
 };
 
-// Fonksiyonu çalıştır
 initHeaderActions();
 
 }
@@ -825,7 +785,6 @@ document.getElementById('profileBtn').addEventListener('click', () => {
 
 // Footer linklerinin çalışmasını sağlayan yardımcı fonksiyon
 const setupFooterLinks = () => {
-    // Favorilerim linkine basınca Favoriler sayfasına git ve oraya odaklan
     const footerFavs = document.querySelector('a[onclick*="navFavorites"]');
     if (footerFavs) {
         footerFavs.addEventListener('click', () => {
